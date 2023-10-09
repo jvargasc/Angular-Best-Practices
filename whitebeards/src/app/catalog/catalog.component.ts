@@ -1,26 +1,28 @@
 import { Component } from '@angular/core';
 
-import { DataRepositoryService } from "../services/data-repository"
-import { IClass } from '../services/class.model';
+import { IClass } from './class.model';
+import { CatalogRepositoryService } from './catalog-repository.service';
+import { UserRepositoryService } from '../services/user-repository.service';
 
 @Component({
-  styleUrls: ['../styles/catalog.css'],
-  templateUrl: '../templates/catalog.html'
+  styleUrls: ['./catalog.component.css'],
+  templateUrl: './catalog.component.html'
 })
-export class CoursesComponent {
+export class CatalogComponent {
   classes: IClass[] = [];
   visibleClasses: IClass[] = [];
 
-  constructor(public dataRepository: DataRepositoryService) { }
+  constructor(private catalogRepositoryService: CatalogRepositoryService,
+              public userRepositoryService: UserRepositoryService) { }
 
   ngOnInit() {
-    this.dataRepository.getCatalog()
+    this.catalogRepositoryService.getCatalog()
       .subscribe((classes: IClass[]) => { this.classes = classes; this.applyFilter('') });
   }
 
   enroll(classToEnroll: IClass) {
     classToEnroll.processing = true;
-    this.dataRepository.enroll(classToEnroll.classId)
+    this.userRepositoryService.enroll(classToEnroll.classId)
       .subscribe({
         error: (err) => { console.error(err); classToEnroll.processing = false },
         complete: () => { classToEnroll.processing = false; classToEnroll.enrolled = true; },
@@ -29,7 +31,7 @@ export class CoursesComponent {
 
   drop(classToDrop: IClass) {
     classToDrop.processing = true;
-    this.dataRepository.drop(classToDrop.classId)
+    this.userRepositoryService.drop(classToDrop.classId)
       .subscribe({
         error: (err) => { console.error(err); classToDrop.processing = false },
         complete: () => { classToDrop.processing = false; classToDrop.enrolled = false; }
@@ -43,12 +45,16 @@ export class CoursesComponent {
     }
 
     if (filter === 'GEN') {
-      this.visibleClasses = this.classes.filter(c =>
-        !c.course.courseNumber.startsWith('CH') &&
-        !c.course.courseNumber.startsWith('PO') &&
-        !c.course.courseNumber.startsWith('SP'));
+      this.showOnlyGeneralCourses();
     } else {
       this.visibleClasses = this.classes.filter(c => c.course.courseNumber.startsWith(filter));
     }
+  }
+
+  private showOnlyGeneralCourses() {
+    this.visibleClasses = this.classes.filter(c =>
+      !c.course.courseNumber.startsWith('CH') &&
+      !c.course.courseNumber.startsWith('PO') &&
+      !c.course.courseNumber.startsWith('SP'));
   }
 }
