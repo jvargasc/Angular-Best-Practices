@@ -4,7 +4,9 @@ import { delay } from 'rxjs/operators';
 
 import { IUser } from '../users/user.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserRepositoryService {
   currentUser: IUser | null = null;
 

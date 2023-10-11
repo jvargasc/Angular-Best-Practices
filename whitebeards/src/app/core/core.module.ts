@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NavBarComponent } from './nav-bar.component';
 import { AccountMenuComponent } from './account-menu.component';
 import { RouterModule } from '@angular/router';
-import { UserRepositoryService } from '../services/user-repository.service';
 
 @NgModule({
   declarations: [ NavBarComponent, AccountMenuComponent ],
@@ -11,6 +10,6 @@ import { UserRepositoryService } from '../services/user-repository.service';
     CommonModule, RouterModule
   ],
   exports: [ NavBarComponent, AccountMenuComponent ],
-  providers: [ UserRepositoryService ]
+  providers: [ ]
 })
 export class CoreModule { }
