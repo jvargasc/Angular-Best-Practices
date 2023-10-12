@@ -6,6 +6,7 @@ import { RegisterComponent } from './register.component';
 import { SignInComponent } from './sign-in.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
+import { UsersRoutingModule } from './users-routing.module';
 
 @NgModule({
   declarations: [ RegisterComponent, SignInComponent ],
@@ -14,7 +15,8 @@ import { SharedModule } from '../shared/shared.module';
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    UsersRoutingModule
   ]
 })
 export class UsersModule { }
